@@ -50,8 +50,6 @@ services:
       - ./web:/app
     expose:
       - 3000
-    environment:
-      - URL_LOCAL=${URL_LOCAL}
     networks:
       - project-network
 
