@@ -1,0 +1,59 @@
+#!/bin/bash
+
+main() {
+    if [ "$IS_WORKER" = "true" ]; then
+        exec "$@"
+    else
+        prepare_file_permissions
+        run_npm_build
+        prepare_storage
+        run_migrations
+        optimize_app
+        run_server "$@"
+    fi
+}
+
+prepare_file_permissions() {
+    chmod a+x ./artisan
+}
+
+run_npm_build() {
+    echo "Installing NPM dependencies"
+    if [ -f "package.json" ]; then
+        echo "Running NPM clean install"
+        npm install
+
+        echo "Running NPM build"
+        npm run build
+    else
+        echo "No package.json found, skipping NPM build"
+    fi
+}
+
+prepare_storage() {
+    # Create required directories for Laravel
+    mkdir -p /usr/share/nginx/html/storage/framework/cache/data
+    mkdir -p /usr/share/nginx/html/storage/framework/sessions
+    mkdir -p /usr/share/nginx/html/storage/framework/views
+
+    # Set permissions for the storage directory
+    chown -R www-data:www-data /usr/share/nginx/html/storage
+    chmod -R 775 /usr/share/nginx/html/storage
+
+    # Ensure the symlink exists
+    php artisan storage:link
+}
+
+run_migrations() {
+    ./artisan migrate
+}
+
+optimize_app() {
+    php artisan cache:clear && php artisan config:clear && php artisan route:clear && php artisan view:clear
+}
+
+run_server() {
+    exec /usr/local/bin/docker-php-entrypoint "$@"
+}
+
+main "$@"

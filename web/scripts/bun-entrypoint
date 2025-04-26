@@ -1,0 +1,36 @@
+#!/bin/bash
+
+main() {
+    if [ "$IS_WORKER" = "true" ]; then
+        exec "$@"
+    else
+        install_dependencies
+        build_app
+        start_server
+    fi
+}
+
+install_dependencies() {
+    echo "Installing dependencies with Bun"
+    if [ -f "bun.lockb" ]; then
+        bun install
+    else
+        echo "No bun.lockb found, skipping install"
+    fi
+}
+
+build_app() {
+    echo "Building Nuxt application"
+    if [ -f "nuxt.config.ts" ] || [ -f "nuxt.config.js" ]; then
+        bun run build
+    else
+        echo "Nuxt config not found, skipping build"
+    fi
+}
+
+start_server() {
+    echo "Starting Nuxt app in production mode"
+    bun run start
+}
+
+main "$@"
