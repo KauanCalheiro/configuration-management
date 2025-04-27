@@ -45,7 +45,7 @@ function onDelete(row: User) {
 }
 
 function fetch(page: string, sort: string, search: string) {
-  return useSanctumFetch<ApiResponse<User[]>>("/api/user", {
+  return useSanctumFetch<ApiResponse<User[]>>("/user", {
     method: "GET",
     query: {
       "page[number]": page,

@@ -65,7 +65,7 @@ async function onSubmit(event: FormSubmitEvent<UserSchema>) {
   loading.value = true;
   try {
     let { error } = await useSanctumFetch<ApiResponse<Task>>(
-      isEditing ? `/api/task/${state.id}` : "/api/task",
+      isEditing ? `/task/${state.id}` : "/task",
       {
         method: isEditing ? "PUT" : "POST",
         body: {

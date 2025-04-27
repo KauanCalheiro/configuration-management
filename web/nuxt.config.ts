@@ -39,7 +39,7 @@ export default defineNuxtConfig({
         { rel: 'apple-touch-icon', href: '/thorn/apple-touch-icon.png', },
       ],
     },
-    baseURL: '/thorn/',
+    baseURL: '/',
   },
 
   sanctum: {
@@ -50,9 +50,9 @@ export default defineNuxtConfig({
 
     endpoints: {
       csrf: '/sanctum/csrf-cookie',
-      login: '/api/auth/login',
-      logout: '/api/auth/logout',
-      user: '/api/auth/user',
+      login: '/auth/login',
+      logout: '/auth/logout',
+      user: '/auth/user',
     },
 
     client: {

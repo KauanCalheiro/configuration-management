@@ -62,7 +62,7 @@ function onDelete(row: Task) {
 }
 
 function fetch(page: string, sort: string, search: string) {
-  return useSanctumFetch<ApiResponse<Task[]>>("/api/task", {
+  return useSanctumFetch<ApiResponse<Task[]>>("/task", {
     method: "GET",
     query: {
       "page[number]": page,
