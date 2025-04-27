@@ -8,7 +8,7 @@ const isOpen = defineModel<boolean>();
 
 function onDelete() {
   const fetch: $Fetch = useSanctumClient();
-  fetch(`/api/user/${user.id}`, { method: "DELETE" })
+  fetch(`/user/${user.id}`, { method: "DELETE" })
     .then(() => {
       isOpen.value = false;
       emit("after-delete");

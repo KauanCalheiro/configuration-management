@@ -10,7 +10,7 @@ const loading = ref(false);
 async function onDelete() {
   loading.value = true;
   const fetch: $Fetch = useSanctumClient();
-  fetch(`/api/task/${task.id}`, { method: "DELETE" })
+  fetch(`/task/${task.id}`, { method: "DELETE" })
     .then(() => {
       isOpen.value = false;
       toast().success({

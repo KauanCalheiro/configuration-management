@@ -29,7 +29,7 @@ function onDelete(row: Task) {
 
 async function onPdf(row: Task) {
   try {
-    const { data, error } = await useSanctumFetch<Blob>(`/api/task/${row.id}/pdf`, {
+    const { data, error } = await useSanctumFetch<Blob>(`/task/${row.id}/pdf`, {
       method: "GET",
       headers: { "Accept": "application/pdf" },
       responseType: "blob",
