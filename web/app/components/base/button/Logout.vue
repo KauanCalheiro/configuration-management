@@ -11,16 +11,6 @@ async function onLogout() {
             description: "Erro ao efetuar logout"
         });
     }
-    // const response = await $fetch("/api/logout", {
-    //     method: "POST",
-    //     body: JSON.stringify({ id: useAuth().user()?.id }),
-    // });
-
-    // if (response.success) {
-    //     useNotification.success("Logout efetuado com sucesso");
-    //     useAuth().logout();
-    //     useRouter().push("/login");
-    // }
 }
 </script>
 
