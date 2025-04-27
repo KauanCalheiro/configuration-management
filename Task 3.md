@@ -1,4 +1,4 @@
-## Task 3 - Unit Tests
+# Task 3 - Unit Tests
 
 🔗 Link: [thorngym.com](http://thorngym.com/)
 
@@ -12,11 +12,9 @@
 
 📂 **Repositório:** [GitHub - Task 3 Repository](https://github.com/KauanCalheiro/configuration-management.git)
 
---- 
-
 ---
 
-### Melhorias no protótipo da Task 2
+## Melhorias no protótipo da Task 2
 
 - [x] ✅ Completar o CRUD de tarefas:
   - [x] ➕ Criar nova tarefa
@@ -32,7 +30,7 @@
 
 ---
 
-### Testes Unitários
+## Testes Unitários
 
 - [x] 🧪 Desenvolver 20 testes unitários
 
@@ -64,8 +62,10 @@
 
 ---
 
-### Publicação
+## Publicação
 
 - [x] 🚀 Publicar a nova versão da aplicação na máquina virtual (VM)
 
----
+<br>
+<br>
+<br>
