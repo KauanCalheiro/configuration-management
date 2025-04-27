@@ -5,6 +5,7 @@ main() {
         exec "$@"
     else
         prepare_file_permissions
+        install_php_dependencies
         run_npm_build
         prepare_storage
         run_migrations
@@ -15,6 +16,19 @@ main() {
 
 prepare_file_permissions() {
     chmod a+x ./artisan
+}
+
+install_php_dependencies() {
+    if [ ! -d "vendor" ]; then
+        echo "Vendor directory not found. Running Composer Install..."
+        composer install --ignore-platform-req=php --no-dev --optimize-autoloader
+        composer clear-cache
+        php artisan package:discover --ansi
+        chmod -R 775 storage
+        chown -R www-data:www-data storage
+    else
+        echo "Vendor directory found. Skipping Composer Install."
+    fi
 }
 
 run_npm_build() {
