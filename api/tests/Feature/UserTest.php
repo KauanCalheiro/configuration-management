@@ -9,10 +9,10 @@ use Tests\TestCase;
 class UserTest extends TestCase {
     use RefreshDatabase;
 
-    private const LOGIN_ENDPOINT = '/api/auth/login';
-    private const LOGOUT_ENDPOINT = '/api/auth/logout';
-    private const LOGGED_USER_ENDPOINT = '/api/auth/user';
-    private const TASKS_ENDPOINT = '/api/task';
+    private const LOGIN_ENDPOINT = '/thorn-api/auth/login';
+    private const LOGOUT_ENDPOINT = '/thorn-api/auth/logout';
+    private const LOGGED_USER_ENDPOINT = '/thorn-api/auth/user';
+    private const TASKS_ENDPOINT = '/thorn-api/task';
 
     private const PASSWORD = 'password123';
 

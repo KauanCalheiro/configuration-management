@@ -13,8 +13,8 @@ use Tests\TestCase;
 class TaskTest extends TestCase {
     use RefreshDatabase;
 
-    private const TASKS_ENDPOINT = '/api/task';
-    private const EXPORT_PDF_ENDPOINT = '/api/task/{task}/pdf';
+    private const TASKS_ENDPOINT = '/thorn-api/task';
+    private const EXPORT_PDF_ENDPOINT = '/thorn-api/task/{task}/pdf';
 
     private const JSON_STRUCTURE = [
         'success',
