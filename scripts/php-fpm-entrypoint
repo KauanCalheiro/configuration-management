@@ -1,0 +1,68 @@
+#!/bin/bash
+
+main() {
+    if [ "$IS_WORKER" = "true" ]; then
+        exec "$@"
+    else
+        prepare_file_permissions
+        install_php_dependencies
+        run_npm_build
+        prepare_storage
+        run_migrations
+        run_server "$@"
+    fi
+}
+
+prepare_file_permissions() {
+    chmod a+x ./artisan
+}
+
+install_php_dependencies() {
+    if [ ! -d "vendor" ]; then
+        echo "Vendor directory not found. Running Composer Install..."
+        composer install --ignore-platform-req=php --no-dev --optimize-autoloader
+        composer clear-cache
+        php artisan package:discover --ansi
+        chmod -R 775 storage
+        chown -R www-data:www-data storage
+    else
+        echo "Vendor directory found. Skipping Composer Install."
+    fi
+}
+
+run_npm_build() {
+    echo "Installing NPM dependencies"
+    if [ -f "package.json" ]; then
+        echo "Running NPM clean install"
+        npm install
+
+        echo "Running NPM build"
+        npm run build
+    else
+        echo "No package.json found, skipping NPM build"
+    fi
+}
+
+prepare_storage() {
+    # Create required directories for Laravel
+    mkdir -p /usr/share/nginx/html/storage/framework/cache/data
+    mkdir -p /usr/share/nginx/html/storage/framework/sessions
+    mkdir -p /usr/share/nginx/html/storage/framework/views
+
+    # Set permissions for the storage directory
+    chown -R www-data:www-data /usr/share/nginx/html/storage
+    chmod -R 775 /usr/share/nginx/html/storage
+
+    # Ensure the symlink exists
+    php artisan storage:link
+}
+
+run_migrations() {
+    ./artisan migrate
+}
+
+run_server() {
+    exec /usr/local/bin/docker-php-entrypoint "$@"
+}
+
+main "$@"
