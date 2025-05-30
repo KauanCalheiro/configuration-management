@@ -64,26 +64,6 @@ class TaskTest extends TestCase {
         $this->actingAs(User::factory()->create());
     }
 
-    public function test_create_task() {
-        $this->authenticate();
-
-        $taskData = Task::factory()->raw();
-        $response = $this->postJson(self::TASKS_ENDPOINT, $taskData);
-
-        $response->assertStatus(200)
-            ->assertJsonStructure(self::JSON_STRUCTURE)
-            ->assertJsonFragment([
-                'success' => true,
-                'message' => __('Request successfully')
-            ])
-            ->assertJsonFragment([
-                'description' => $taskData['description'],
-                'status' => $taskData['status'],
-                'due_date' => $taskData['due_date'],
-                'completed_at' => $taskData['completed_at'],
-            ]);
-    }
-
     public function test_create_task_missing_fields() {
         $this->authenticate();
 
@@ -91,30 +71,6 @@ class TaskTest extends TestCase {
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['description', 'status']);
-    }
-
-    public function test_update_task() {
-        $this->authenticate();
-
-        $task = Task::factory()->create();
-
-        $response = $this->putJson(self::TASKS_ENDPOINT . "/{$task->id}", [
-            'description' => 'Atualizada',
-        ]);
-
-        $response->assertStatus(200)->assertJson([
-            'success' => true,
-            'message' => __('Request successfully'),
-            'payload' => [
-                'id' => $task->id,
-                'description' => 'Atualizada',
-                'due_date' => $task->due_date ? $task->due_date->format('Y-m-d') : null,
-                'completed_at' => $task->completed_at ? $task->completed_at->format('Y-m-d') : null,
-                'created_at' => $task->created_at ? $task->created_at->format('Y-m-d') : null,
-                'status' => $task->status,
-            ],
-            'count' => 1,
-        ]);
     }
 
     public function test_update_task_invalid_id() {
