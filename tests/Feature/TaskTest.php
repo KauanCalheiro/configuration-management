@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class TaskTest extends TestCase {
-    use RefreshDatabase;
+    use RefreshDatabase; 
 
     private const TASKS_ENDPOINT = '/api/task';
     private const EXPORT_PDF_ENDPOINT = '/api/task/{task}/pdf';
