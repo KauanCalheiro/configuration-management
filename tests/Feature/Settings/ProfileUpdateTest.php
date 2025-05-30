@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class ProfileUpdateTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase; 
 
     public function test_profile_information_can_be_updated(): void
     {
