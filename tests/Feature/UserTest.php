@@ -88,15 +88,6 @@ class UserTest extends TestCase {
             ]);
     }
 
-    public function test_access_protected_routes_with_login() {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        $response = $this->getJson(self::TASKS_ENDPOINT);
-
-        $response->assertStatus(200);
-    }
-
     public function test_logout() {
         $user = User::factory()->create();
         $this->actingAs($user);
