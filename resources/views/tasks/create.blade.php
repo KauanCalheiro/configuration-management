@@ -30,11 +30,11 @@
                 <label for="status" style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Status</label>
                 <select name="status" id="status" required
                     style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
-                    <option value="Parado" {{ old('status', $task->status) == 'Parado' ? 'selected' : '' }}>Parado
+                    <option value="Parado" selected>Parado
                     </option>
-                    <option value="Em andamento" {{ old('status', $task->status) == 'Em andamento' ? 'selected' : '' }}>Em
+                    <option value="Em andamento">Em
                         andamento</option>
-                    <option value="Concluido" {{ old('status', $task->status) == 'Concluido' ? 'selected' : '' }}>
+                    <option value="Concluido">
                         Concluído</option>
                 </select>
                 @error('status')
