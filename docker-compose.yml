@@ -6,11 +6,9 @@ services:
       context: ./postgres
       dockerfile: Dockerfile
     env_file:
-      - ./postgres/.env
+      - .env
     expose:
       - 5432
-    ports:
-      - "5432:5432"
     volumes:
       - ./postgres/data:/var/lib/postgresql/data
       - ./postgres/dump.sql:/docker-entrypoint-initdb.d/init.sql
@@ -25,8 +23,6 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres
-    env_file:
-      - ./.env
     volumes:
       - .:/usr/share/nginx/html/
       - storage:/usr/share/nginx/html/storage:rw
@@ -45,7 +41,7 @@ services:
     depends_on:
       - api
     ports:
-      - "80:80"
+      - "${NGINX_PORT}:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/templates/default.conf.template
       - storage:/usr/share/nginx/html/storage:rw
