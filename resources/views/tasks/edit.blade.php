@@ -30,6 +30,17 @@
             </div>
 
             <div>
+                <label for="completed_at" style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Data de
+                    Conclusão</label>
+                <input type="date" name="completed_at" id="completed_at"
+                    value="{{ old('completed_at', $task->completed_at?->format('Y-m-d')) }}"
+                    style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+                @error('completed_at')
+                    <p style="color: #c53030; font-size: 0.875rem; margin-top: 0.25rem;">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
                 <label for="status" style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Status</label>
                 <select name="status" id="status" required
                     style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
