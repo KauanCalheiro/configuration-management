@@ -8,6 +8,8 @@ main() {
         install_php_dependencies
         run_npm_build
         prepare_storage
+        check_laravel_log_file
+        generate_app_key
         run_migrations
         run_server "$@"
     fi
@@ -64,5 +66,40 @@ run_migrations() {
 run_server() {
     exec /usr/local/bin/docker-php-entrypoint "$@"
 }
+
+generate_app_key() {
+    if ! grep -q "^APP_KEY=" .env; then
+        echo "APP_KEY not found in .env. Generating key..."
+        php artisan key:generate
+    else
+        echo "APP_KEY already set. Skipping key generation."
+    fi
+}
+
+check_laravel_log_file() {
+    LOG_DIR="storage/logs"
+    LOG_FILE="$LOG_DIR/laravel.log"
+
+    if [ ! -d "$LOG_DIR" ]; then
+        echo "📁 Diretório $LOG_DIR não encontrado. Criando..."
+        mkdir -p "$LOG_DIR"
+        chown -R www-data:www-data "$LOG_DIR"
+        chmod -R 775 "$LOG_DIR"
+    fi
+
+    if [ ! -f "$LOG_FILE" ]; then
+        echo "📝 Arquivo $LOG_FILE não existe. Criando..."
+        touch "$LOG_FILE"
+    fi
+
+    if [ ! -r "$LOG_FILE" ] || [ ! -w "$LOG_FILE" ]; then
+        echo "🔧 Corrigindo permissões de $LOG_FILE..."
+        chmod 664 "$LOG_FILE"
+        chown www-data:www-data "$LOG_FILE"
+    else
+        echo "✅ $LOG_FILE pronto e com permissões adequadas."
+    fi
+}
+
 
 main "$@"
