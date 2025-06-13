@@ -7,8 +7,8 @@ main() {
         prepare_file_permissions
         install_php_dependencies
         run_npm_build
-        prepare_storage
         check_laravel_log_file
+        prepare_storage
         generate_app_key
         run_migrations
         run_server "$@"
@@ -22,7 +22,7 @@ prepare_file_permissions() {
 install_php_dependencies() {
     if [ ! -d "vendor" ]; then
         echo "Vendor directory not found. Running Composer Install..."
-        composer install --ignore-platform-req=php --no-dev --optimize-autoloader
+        composer install --ignore-platform-req=php
         composer clear-cache
         php artisan package:discover --ansi
         chmod -R 775 storage
@@ -68,11 +68,13 @@ run_server() {
 }
 
 generate_app_key() {
-    if ! grep -q "^APP_KEY=" .env; then
-        echo "APP_KEY not found in .env. Generating key..."
+    app_key=$(grep "^APP_KEY=" .env | cut -d '=' -f2- | tr -d '[:space:]')
+
+    if [ -z "$app_key" ]; then
+        echo "APP_KEY está vazio. Gerando chave..."
         php artisan key:generate
     else
-        echo "APP_KEY already set. Skipping key generation."
+        echo "APP_KEY já está definido. Ignorando geração."
     fi
 }
 
