@@ -1,0 +1,31 @@
+# .github/workflows/deploy.yml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar chave SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy para o ambiente
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "main" ]]; then
+            echo "Deploy de produção"
+            ssh -o StrictHostKeyChecking=no univates@177.44.248.68 "sudo su -c 'cd /home/univates/prod/ && ./deploy.sh'"
+          elif [[ "${GITHUB_REF##*/}" == "develop" ]]; then
+            echo "Deploy de homologação"
+            ssh -o StrictHostKeyChecking=no univates@177.44.248.68 "sudo su -c 'cd /home/univates/homolog/ && ./deploy.sh'"
+          fi
