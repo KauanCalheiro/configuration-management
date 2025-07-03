@@ -9,24 +9,16 @@ on:
 jobs:
   deploy-prod:
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu:22.04
-    environment: production
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Instalar dependências
-        run: |
-          apt-get update
-          apt-get install -y openssh-client
-
-      - name: Configurar chave SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy para produção
         run: |
           echo "Iniciando deploy de produção"
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa univates@177.44.248.68 "sudo su -c 'cd /home/univates/prod/ && chmod +x ./deploy.sh && ./deploy.sh'"
+          ssh -o StrictHostKeyChecking=no univates@177.44.248.68 "sudo su -c 'cd /home/univates/prod/ && chmod +x ./deploy.sh && ./deploy.sh'"
           echo "Deploy de produção concluído"
