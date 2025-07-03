@@ -1,0 +1,27 @@
+# .github/workflows/deploy-homolog.yml
+name: Deploy Homologação
+
+on:
+  push:
+    branches:
+      - homolog
+
+jobs:
+  deploy-homolog:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:22.04
+    environment: staging
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configurar chave SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+
+      - name: Deploy para homologação
+        run: |
+          echo "Iniciando deploy de homologação"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa univates@177.44.248.68 "sudo su -c 'cd /home/univates/homolog/ && chmod +x ./deploy.sh && ./deploy.sh'"
+          echo "Deploy de homologação concluído"
