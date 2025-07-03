@@ -42,7 +42,7 @@
                                 {{ $task->created_at?->format('d/m/Y') }}
                             </div>
                             <div>
-                                <span class="font-medium">Vencimento:</span>
+                                <span class="font-medium">Data de Vencimento:</span>
                                 {{ $task->due_date?->format('d/m/Y') ?? 'N/A' }}
                             </div>
                             @if($task->completed_at)
