@@ -13,16 +13,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
+      - name: Configurar chave SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 177.44.248.68 >> ~/.ssh/known_hosts
       - name: Deploy para o ambiente
         run: |
           if [[ "${GITHUB_REF##*/}" == "main" ]]; then
             echo "Deploy de produção"
-            ssh -o StrictHostKeyChecking=no univates@177.44.248.68 "sudo su -c 'cd /home/univates/prod/ && chmod +x ./deploy.sh && ./deploy.sh'"
+            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa univates@177.44.248.68 "sudo su -c 'cd /home/univates/prod/ && chmod +x ./deploy.sh && ./deploy.sh'"
           else
             echo "Deploy de homologação"
-            ssh -o StrictHostKeyChecking=no univates@177.44.248.68 "sudo su -c 'cd /home/univates/homolog/ && chmod +x ./deploy.sh && ./deploy.sh'"
+            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa univates@177.44.248.68 "sudo su -c 'cd /home/univates/homolog/ && chmod +x ./deploy.sh && ./deploy.sh'"
           fi
