@@ -24,47 +24,9 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-          echo "Host 177.44.248.68" >> ~/.ssh/config
-          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
-          echo "  UserKnownHostsFile /dev/null" >> ~/.ssh/config
-          echo "  ConnectTimeout 30" >> ~/.ssh/config
-          echo "  ServerAliveInterval 60" >> ~/.ssh/config
-          echo "  ServerAliveCountMax 3" >> ~/.ssh/config
-          chmod 600 ~/.ssh/config
-
-      - name: Testar conectividade SSH
-        run: |
-          echo "Testando conectividade com o servidor..."
-          timeout 30 ssh -i ~/.ssh/id_rsa univates@177.44.248.68 "echo 'Conexão SSH estabelecida com sucesso'"
 
       - name: Deploy para produção
         run: |
           echo "Iniciando deploy de produção"
-
-          # Função para retry em caso de falha
-          retry_ssh() {
-            local max_attempts=3
-            local attempt=1
-
-            while [ $attempt -le $max_attempts ]; do
-              echo "Tentativa $attempt de $max_attempts"
-
-              if timeout 300 ssh -i ~/.ssh/id_rsa univates@177.44.248.68 "sudo su -c 'cd /home/univates/prod/ && chmod +x ./deploy.sh && ./deploy.sh'"; then
-                echo "Deploy executado com sucesso!"
-                return 0
-              else
-                echo "Tentativa $attempt falhou"
-                if [ $attempt -lt $max_attempts ]; then
-                  echo "Aguardando 10 segundos antes da próxima tentativa..."
-                  sleep 10
-                fi
-                attempt=$((attempt + 1))
-              fi
-            done
-
-            echo "Todas as tentativas falharam"
-            return 1
-          }
-
-          retry_ssh
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa univates@177.44.248.68 "sudo su -c 'cd /home/univates/prod/ && chmod +x ./deploy.sh && ./deploy.sh'"
           echo "Deploy de produção concluído"
