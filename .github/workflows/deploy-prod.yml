@@ -15,6 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Instalar dependências
+        run: |
+          apt-get update
+          apt-get install -y openssh-client
+
       - name: Configurar chave SSH
         run: |
           mkdir -p ~/.ssh
