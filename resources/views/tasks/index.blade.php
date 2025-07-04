@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-                Lista de Tarefas
+                Lista de Tarefas Final
             </h1>
             <a href="{{ route('tasks.create') }}"
                 class="inline-flex items-center justify-center px-4 py-2 bg-zinc-800 rounded-md text-white dark:bg-zinc-700 hover:bg-zinc-500 dark:hover:bg-zinc-600 transition-colors duration-200">
@@ -25,7 +25,7 @@
                                 {{ $task->description }}
                             </h3>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                        @if($task->status === 'concluída') 
+                                        @if($task->status === 'concluída')
                                             bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
                                         @elseif($task->status === 'pendente')
                                             bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200
